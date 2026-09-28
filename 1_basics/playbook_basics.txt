@@ -1,0 +1,439 @@
+# ------------------------------- #
+# create repository               #
+# ------------------------------- #
+
+# Show contents of the .git folder.
+git init
+
+# ------------------------------- #
+# initial commits                 #
+# ------------------------------- #
+
+echo shopping > todo.txt
+
+echo testje > temp.txt
+
+# New items in red.
+git status
+
+git add -A
+
+# Staged items in green.
+git status
+
+# Remove temp.txt from commit.
+git reset temp.txt
+
+# Note temp.txt is untracked.
+git status
+
+git commit -m "Add to do."
+
+# Commited todo.txt, temp.txt untracked. 
+git status
+
+# Show commit in log.
+git log
+
+# Second commit
+echo pizza > shop.txt
+
+git status
+
+git add shop.txt
+
+git status
+
+git commit -m "Add shopping list."
+
+# Now displays 2 commits.
+git log
+
+
+# ------------------------------- #
+# commit objects                  #
+# ------------------------------- #
+
+# Look at first commit.
+
+# Commit object points to tree.
+git cat-file -p _
+
+# Tree object points to files.
+git cat-file -p _
+
+# Blob object shows file contents.
+git cat-file -p _
+
+
+# ------------------------------- #
+# commit added file               #
+# ------------------------------- #
+
+# Look at second commit.
+git cat-file -p _
+
+# Look at second tree.
+# Note that todo.txt uses same blob.
+git cat-file -p _
+
+
+# ------------------------------- #
+# .gitignore                      #
+# ------------------------------- #
+
+# Untracked temp.txt.
+git status
+
+# Create .gitignore
+echo temp.txt > .gitignore
+
+# Verify existence
+dir
+
+# Untracked .gitignore, but not temp.txt.
+git status
+
+# Commit .gitignore
+
+git add -A
+git commit -m "Add .gitignore"
+
+
+# ------------------------------- #
+# git diff                        #
+# ------------------------------- #
+
+echo cleaning >> todo.txt
+
+git status
+
+# Show local changes to index.
+git diff todo.txt
+
+# Add to index.
+git add -A
+
+# Added to index, no differences.
+git diff todo.txt
+
+# Compare to last commit directly.
+git diff HEAD todo.txt
+
+git commit -m "Add cleaning."
+
+# Compare todo.txt to first commit.
+git diff _ _ todo.txt
+
+
+# ------------------------------- #
+# checkout file                   #
+# ------------------------------- #
+
+# Update shop.txt
+echo beer >> shop.txt
+
+# Differs from HEAD index.
+git diff HEAD shop.txt
+
+# Revert to last commit.
+git checkout HEAD shop.txt
+
+# Changes are gone.
+git diff shop.txt
+
+
+# ------------------------------- #
+# reset hard                      #
+# ------------------------------- #
+
+# Deleted all text files... woops!
+del *.txt
+
+dir
+
+# Hard reset to restore working directory.
+git reset --hard HEAD
+
+# Note: temp.txt is lost forever...
+dir
+
+git log
+
+# Hard reset to first commit
+git reset --hard _
+
+# Only todo.txt
+dir
+
+# HEAD and main set to first commit.
+git log
+
+# Use reflog to get back to the final commit.
+git reflog
+
+# Checkout the final commit.
+git reset --hard _
+
+# All files are back!
+dir
+
+# Pfew, all good...
+git log
+
+
+# ------------------------------- #
+# checkout commit                 #
+# ------------------------------- #
+
+git log
+
+# Moves HEAD to the oldest commit!
+git checkout _
+
+# Detached HEAD, no longer on main.
+git log
+
+# Oldest version of main.
+cat todo.txt
+
+# Can go back when no changes made.
+git checkout main
+
+# HEAD points to main again.
+git log
+
+# Everything is back...
+dir
+
+
+# ------------------------------- #
+# HEAD and refs                   #
+# ------------------------------- #
+
+# Points to refs/heads/main.
+cat .git/HEAD
+
+# Points to last commit.
+cat .git/refs/heads/main
+
+# Hash corresponds to latest commit.
+git log
+
+echo "beer" >> shop.txt
+
+git add -A
+
+git commit -m "Add beer"
+
+git log
+
+# Points to the new commit.
+# Heads are dynamically updated labels.
+cat .git/refs/heads/main
+
+
+# ------------------------------- #
+# new branch                      #
+# ------------------------------- #
+
+# Working on main branch.
+git status
+
+# Points to main.
+cat .git/HEAD
+
+# Creates a new branch.
+git checkout -b develop
+
+# Working on develop
+git status
+
+# Now points to develop.
+cat .git/HEAD
+
+# Points to same commit as main!
+# Only HEAD has changed.
+cat .git/refs/heads/develop
+cat .git/refs/heads/main
+
+# Create a new commit.
+echo apples >> shop.txt
+git add -A
+git commit -m "Add apples"
+
+# Shows main and develop.
+git log
+
+# Develop has moved on.
+cat .git/refs/heads/develop
+
+# Main has not.
+cat .git/refs/heads/main
+
+
+
+# ------------------------------- #
+# merge fast forward           #
+# ------------------------------- #
+
+cd merge-ff
+
+# Two commits on develop after first main commit.
+git log
+
+# Switch to main branch
+git checkout main
+
+# No commits after the first, can fast forward.
+git log
+
+# Note that git says it fast forwarded.
+git merge develop
+
+# Check the log for main.
+# Main and develop piont to the same commit.
+git log
+
+
+# ------------------------------- #
+# merge no fast forward           #
+# ------------------------------- #
+
+cd merge-no-ff
+
+# Show commits on develop branch.
+git log
+
+# Switch to main branch.
+git checkout main
+
+# Second commit sits between develop 1 and 2.
+git log
+
+# Merge develop into main.
+git merge develop
+
+# Got an extra merge commit.
+git log
+
+# Double parent on the merge commit.
+git cat-file -p <merge commit>
+
+# Show as a graph.
+git log --graph
+
+
+# ------------------------------- #
+# rebase merge                    #
+# ------------------------------- #
+
+cd merge-rebase
+
+# Again 2 commits on develop.
+git log
+
+# Switch to main.
+git checkout main
+
+# Commit in between develop commits.
+git log
+
+# Rebase develop on current main.
+# Switches branch to develop!
+git rebase main develop
+
+# Show log.
+# Develop commits now follow main commits.
+# Rewrite created new commits (check hashes).
+git log
+
+# Switch back to main.
+git checkout main
+
+# Still only 2 commits.
+git log
+
+# Perform fast forward merge.
+git merge develop
+
+# Commits now both on main and develop.
+# No merge commit was created!
+git log
+
+# Graph shows single line.
+git log --graph
+
+
+# ------------------------------- #
+# squash merge                    #
+# ------------------------------- #
+
+cd merge-squash
+
+# Two commits on develop.
+git log
+
+# Switch to main.
+git checkout main
+
+# Two commits on main.
+git log
+
+# Squash merge.
+git merge --squash develop
+
+# Nothing changed; merged but not committed...
+git log
+
+# Git commit
+git status
+git add -A
+git commit -m "Squash merge develop"
+
+# Check commit on main.
+git log
+
+# Squash added all changes from develop.
+git diff <Main 2>
+
+# Check log on develop.
+# Branches have become incompatible!
+git log develop
+
+
+# ------------------------------- #
+# merge conflict                  #
+# ------------------------------- #
+
+cd merge-conflict
+
+git log
+
+# Displays conflict warning.
+git merge develop
+
+# No new commits yet.
+git log
+
+# View conflicting files under unmerged paths.
+git status
+
+# Can always abort the merge
+git merge --abort
+
+git status
+
+git merge develop
+
+# Show conflicted file.
+cat main.txt
+
+# Edit the file, fix any conflicts.
+code main.txt
+
+git add -A
+git commit -m "Merge develop"
+
+git log --graph
+
