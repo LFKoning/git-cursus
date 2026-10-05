@@ -1,0 +1,476 @@
+# ------------------------------- #
+# fetch & pull                    #
+# ------------------------------- #
+
+# Clone the pig latin repo.
+git clone https://github.com/LFKoning/pig-latin
+
+# Personalize pyproject.toml.
+# Add author name and e-mail.
+code pyproject.toml
+
+# Commit the change.
+git add -A
+git commit -m "Personalize project"
+
+# Personalize on remote Github repo.
+
+# Check local main is personalized.
+git log
+
+# Check origin/main; still shows only initial commit.
+git log origin/main
+
+# Fetch changes from the remote.
+# No impact on working directory!
+git fetch
+
+# Note the remote personalization appeared.
+git log origin/main
+
+# Pull the changes into the working directory.
+# Creates a merge conflict!
+git pull
+
+# Note that brances have diverged!
+git status
+
+# Fix conflict as per usual.
+code pyproject.toml
+
+git add -A
+git commit -m "Fix personalization"
+
+
+# ------------------------------- #
+# GH: create repo                 #
+# ------------------------------- #
+
+# Go to https://www.github.com
+
+# Click [Sign in] top right.
+
+# Click [Create repository] in left menu.
+
+# Fill in [pig-latin] as name.
+
+# Add a description.
+
+# Select [Public] for the course.
+
+# Deselect [Add README].
+
+# Select [None] for .gitignore.
+
+# Set licens to [None].
+
+# Click [Create repository]
+
+
+# ------------------------------- #
+# remote add                      #
+# ------------------------------- #
+
+# Use the repository created earlier.
+# Using origin as name is standard.
+git remote add personal https://github.com/LFKoning/personal
+
+# Show remote was added succesfully.
+git remote -v
+
+# Push and set up tracking on origin/main.
+git push personal
+
+# Can add another remote.
+git remote set-url origin https://github.com/LFKoning/personal
+
+# Show both remotes.
+git remote -v
+
+# Update README.md repo URLs.
+code README.md
+
+# Now we can just use push.
+git push
+
+# To delete a remote.
+git remote remove personal
+
+git remote -v
+
+
+# ------------------------------- #
+# branch tracking                 #
+# ------------------------------- #
+
+# Only main branch
+git branch
+
+# Create a new local branch
+git checkout -b test-tracking
+
+# Show new branch.
+git branch
+
+# No upstream branch to track...
+git push
+
+# Show tracking info using -vv.
+git branch -vv
+
+# Push and set tracking to origin/test-tracking.
+git push --set-upstream origin test-tracking
+
+# Show updated tracking info.
+git branch -vv
+
+# Show local and remote with tracking info.
+git branch -avv
+
+# Remote info is under .git/refs/remotes
+dir .\.git\refs\remotes\
+dir .\.git\refs\remotes\origin
+
+
+# ------------------------------- #
+# delete branch                   #
+# ------------------------------- #
+
+# Switch to main branch.
+git checkout main
+
+git branch -a
+
+# Delete a local branch.
+git branch -d test-tracking
+
+# Local branch gone, but not remote.
+git branch -a
+
+# Remote requires a push.
+git push origin --delete test-tracking
+
+# Verify it is gone.
+git branch -a
+
+
+# ------------------------------- #
+# GH: create PR                   #
+# ------------------------------- #
+
+# Go to [Settings] > [Collaborators]
+
+# Invite the trainee left of you.
+
+# Check inbox top left screen.
+
+# Accept the invitation.
+
+# Create a new branch
+git checkout -b feature/add-author
+
+# Add trainee left as author.
+code pyproject.toml
+
+# Commit your work.
+git add -A
+git commmit -m "Add second author"
+
+# Push to remote branch.
+git push --set-upstream origin feature/add-author
+
+# Click the Pull Request link.
+# Go to repository on GitHub > Pull Requests > Create.
+
+# Fill in Title and Description.
+
+# Add trainee as reviewer to the PR.
+
+# Click [Ready to review].
+
+
+# ------------------------------- #
+# GH: review PR                   #
+# ------------------------------- #
+
+# Go to Repository > Pull Requests > Add your review
+
+# Check the code under [Files Changed]
+
+# Use [+] to add inline comments to the code.
+
+# Optional: Use [Viewed] check box to complete a file.
+
+# Use [Review changes] to finalize the review.
+
+# Write an overal assessment of the changes.
+
+# Choose to approve or request changes.
+
+# Submit review.
+
+
+# ------------------------------- #
+# GH: create workflow             #
+# ------------------------------- #
+
+# Go to Repository > Actions
+
+# Click [Configure] on [Python Package].
+
+# Check file name: /.github/workflows/<name>.yaml
+
+# Check properties:
+
+	# name; should match the file name.
+
+	# on; which actions and branches trigger the Workflow
+
+	# jobs; define actions.
+
+	# runs-on; OS to run on, prefer Linux
+
+	# strategy > matrix > python-version; Python versions to test.
+
+	# steps; actions to perform.
+
+	# steps > uses: pre-defined action -> see marketplace.
+
+	# steps > run: run a shell script.
+
+# Copy-paste in github_pipeline.yaml
+
+# Commit the changes.
+
+# Go to Repository > Actions.
+
+# Look at the Workflow run.
+
+
+# ------------------------------- #
+# GH: create ruleset              #
+# ------------------------------- #
+
+# Go to Repository > Settings > Rules > Rulesets.
+
+# Click [New ruleset] > [New branch ruleset].
+
+# Name: ProtectMain.
+
+# Set to [Active].
+
+# Target branches: Add main branch.
+
+# Require Pull Request before merging.
+
+	# Required approvals: 1.
+
+	# Allowed merge methods.
+
+# Require status checks to pass [Add checks].
+
+	# Select [code_quality] x2
+
+# Hit [Create] button (and authenticate).
+
+# Go back to open Pull Request.
+
+# Note the extra checks.
+
+# Close and Reopen to run the checks.
+
+
+# ------------------------------- #
+# GH: create issues               #
+# ------------------------------- #
+
+# Go to Repository > Issues
+
+# Click [New issue]
+
+# Fill in [Title]: Add personal information.
+
+# Fill in [Description]: Add personal info to pyproject.toml / README.md
+
+# Assign to self.
+
+# Select [enhancement] as label.
+
+# Click [Create].
+
+# Click on Repositry > Issues for overview.
+
+
+# ------------------------------- #
+# GH: create project              #
+# ------------------------------- #
+
+# Go to Repository > Projects
+
+# Click [+ New project]
+
+# Select [Team Planning].
+
+# Go to [:] Settings and check project settings.
+
+# Click [+ Add item] > [+] > [Add item from repository]
+
+# Select [Add personal information] from the pig-latin repo.
+
+# Open the issue from the board.
+
+# Note the new options under [Project].
+
+
+# ------------------------------- #
+# AD: create project + repo       #
+# ------------------------------- #
+
+# Go to https://dev.azure.com/lukas-koning/
+
+# Click [Create Project] from home screen.
+
+# Fill in name and description.
+
+# Select [Public]
+
+# Select [git] for version control
+
+# Select [Agile] for process.
+
+# Go to [Repos].
+
+# Note default repo named after project.
+
+# Select [+ New repository] from the drop down up top.
+
+# Fill in a name.
+
+# Deselect [Add a README].
+
+# Select [Add a .gitignore: None].
+
+
+# ------------------------------- #
+# AD: pull requests               #
+# ------------------------------- #
+
+# Go to Repos > Pull requests.
+
+# Select [Create a pull request] or [New pull request]
+
+# Fill in Title and Description.
+
+# Select optional reviewers / add required reviewers.
+
+# Can link a work item.
+
+# Check changes under [Files].
+
+# Hit [Create]
+
+# At the overview: Note the comment options.
+
+# At the files overview: Note inline comments.
+
+# Note the approval options at the top.
+
+# Click [Approve].
+
+# Press the [Complete] button.
+
+# Note the different merge options.
+
+
+# ------------------------------- #
+# AD: pipelines                   #
+# ------------------------------- #
+
+# Go to Pipelines.
+
+# Click [Create Pipeline].
+
+# Select [Azure Repos Git] for code location.
+
+# Select [pig-latin] as repository.
+
+# Select [Python Package] as template.
+
+# Edit the YAML and click [Save and Run].
+
+# Go to Pipelines > Recent.
+
+# Click the last run of the pig-latin pipeline.
+
+# Look at Summary and Tests.
+
+# Click a job for details.
+
+# Look at the output from a few steps.
+
+
+# ------------------------------- #
+# AD: branch policies             #
+# ------------------------------- #
+
+# Go to Repos > Branches
+
+# Click on [:] after the main branch.
+
+# Select [Branch policies].
+
+# Or go to Project settings > Repositories > pig-latin > Policies > Branch policies
+
+# Note: clicking on feature allows setting feature/* policy.
+
+# Set number of required reviewers.
+
+# Select [Allow requestors to approve their own work]
+
+# Under [Build Validation] select the [pig-latin] pipeline.
+
+# Check back on the Pull Request.
+
+
+# ------------------------------- #
+# AD: manage tasks                #
+# ------------------------------- #
+
+
+# Go to Board > Work Items.
+
+# Filter by [Recently updated] / [Assigned to me]
+
+# Click [+ New Work Item] > Show different types.
+
+# Go to [Backlogs] > Show hierarchy in types.
+
+# Open a user story.
+
+# Show [State] options.
+
+# Describe [Acceptance criteria].
+
+# Use [Planning] to specify [Story points] and [Priority].
+
+# Under [Related Work] use [Add Link] and select [New Item].
+
+# Select [Child] and [Task] and set a [Title].
+
+# Fill in details and [Save and Close]
+
+# Go to Boards: This is the Kanban-style board.
+
+# Go to Sprints: This is the iterative planning board.
+
+
+
+
+
+
+
+
+
+
+
+
